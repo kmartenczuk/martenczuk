@@ -17,3 +17,13 @@ class CSVFile:
         with open(self.filepath + '/' + self.fileName + '.csv', mode='r') as sourcefile:
             self.data = csv.reader(sourcefile, delimiter=self.delim)
 
+class SQLConn:
+    def __init__(self, configFile: JSONFile) -> object:
+        self.drivers = configFile.data['drivers']
+        self.server = configFile.data['server']
+        self.port = configFile.data['port']
+        self.user = configFile.data['user']
+        self.password = configFile.data['password']
+        self.database = configFile.data['database']
+        self.trustmode = configFile.data['Trusted_Connection']
+        self.conn = pypyodbc.connect('DRIVER={' + self.drivers + '};SERVER='+ self.server +';UID='+ self.user +';PWD='+ self.password +';DATABASE='+ self.database +';Trusted_Connection='+ self.trustmode +';')
