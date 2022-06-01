@@ -3,6 +3,8 @@
 import json
 import csv
 import time
+import pypyodbc
+from tqdm import tqdm
 
 class JSONFile:
     def __init__(self, path: str, name: str) -> object:
@@ -35,22 +37,22 @@ class SQLObject:
         self.fullname = self.schema + "." + self.object
 
 def VTE(source: SQLObject, destination: SQLObject, SQLConnection: SQLConn):
-   conn0 = SQLConnection.conn
-   cursor = conn0.cursor()
-   cols = cursor.execute("""Select [name] from sys.columns WHERE object_id = OBJECT_ID('"""+source+"""')""").fetchall()
-   cols_string = cols[0][0]
-   for i in range (1,len(cols)):
-       cols_string += " , [" + cols[i][0] + "]"
-   rows = cursor.execute("""Select ["""+cols[0][0]+"""] from """+source+""" ORDER BY date""").fetchall()
-   for i in tqdm.tqdm(range(len(rows))):
-       row = cursor.execute("""Select * from """+source+""" WHERE """+cols[0][0]+"""='"""+rows[i][0]+"""'""").fetchall()
-       values_string = "'" + row[0][0] + "'"
-       for j in range (1,len(row[0])): values_string += ",'" + str(row[0][j])+"'"
-       try:
-           cursor.execute(""" Insert into """ + destination + """ (""" + cols_string + """) VALUES (""" + values_string + """)""")
-           cursor.commit()
-       except:
-           pass
-       time.sleep(1)
-   conn0.close()
-   return 0
+    conn0 = SQLConnection.conn
+    cursor = conn0.cursor()
+    cols = cursor.execute("""Select [name] from sys.columns WHERE object_id = OBJECT_ID('"""+source+"""')""").fetchall()
+    cols_string = cols[0][0]
+    for i in range (1,len(cols)):
+        cols_string += " , [" + cols[i][0] + "]"
+    rows = cursor.execute("""Select ["""+cols[0][0]+"""] from """+source+""" ORDER BY date""").fetchall()
+    for i in tqdm(range(len(rows))):
+        row = cursor.execute("""Select * from """+source+""" WHERE """+cols[0][0]+"""='"""+rows[i][0]+"""'""").fetchall()
+        values_string = "'" + row[0][0] + "'"
+        for j in range (1,len(row[0])): values_string += ",'" + str(row[0][j])+"'"
+        try:
+            cursor.execute(""" Insert into """ + destination + """ (""" + cols_string + """) VALUES (""" + values_string + """)""")
+        except:
+            pass
+        time.sleep(1)
+    conn0.commit()
+    conn0.close()
+    return 0

@@ -3,7 +3,7 @@ import os
 
 here = os.path.abspath(os.path.dirname(__file__))
 
-VERSION = '0.0.5'
+VERSION = '0.1.1'
 DESCRIPTION = 'SQL Server,CSV & JSON Connection Objects and Tools'
 
 # Setting up
