@@ -3,7 +3,7 @@ import os
 
 here = os.path.abspath(os.path.dirname(__file__))
 
-VERSION = '0.1.1'
+VERSION = '0.2.3'
 DESCRIPTION = 'SQL Server,CSV & JSON Connection Objects and Tools'
 
 # Setting up
@@ -14,10 +14,10 @@ setup(
     author_email="<kamil.martenczuk@gmail.com>",
     description=DESCRIPTION,
     packages=find_packages(),
-    install_requires=['pypyodbc', 'tqdm'],
+    install_requires=['pypyodbc', 'tqdm', 'colorama'],
     keywords=['python', 'sql', 'csv', 'json'],
     classifiers=[
-        "Development Status :: 2 - Pre-Alpha",
+        "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
         "Programming Language :: Python :: 3",
         "Operating System :: Unix",
